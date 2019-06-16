@@ -4,8 +4,21 @@ const app = () => {
   
 	const handleZipCode = (e) => {
     //get zip value from field
-		let zip = e.target.value;
-    //proxyurl workaround for cors
+		var zip = e.target.value;
+    //get zip code element
+    var zipElement = e.target;
+    //get error text container
+    let errorField = document.getElementById("error-field");
+    //remove error text after error occurs
+    if (errorField.firstChild) {
+    errorField.removeChild(errorField.firstChild);
+  }
+    //hide error text
+    errorField.setAttribute('hidden',true)
+    //remove error border
+    zipElement.removeAttribute('style');
+
+    //proxyurl workaround for cors error issues
 		const proxyurl = "https://cors-anywhere.herokuapp.com/";
     //api endpoit for finding city/state
     const url = `https://firstfamilyinsurance.com/api/zipLookup?ZipCode=${zip}`;
@@ -15,6 +28,12 @@ const app = () => {
 	    fetch(proxyurl + url)
       .then(response => response.json())
       .then(data => {
+        if (data.data.length === 0) {
+          errorField.removeAttribute('hidden');
+          console.log(zipElement.style = 'border:5px solid red');
+          errorField.appendChild(document.createTextNode("Zip Code Invalid"));
+
+        }
         console.log(data)
         let cities = []
         //array of all cities in zipcode
@@ -41,6 +60,7 @@ const app = () => {
                 let container = document.getElementById("container");
                 container.appendChild(document.createTextNode("City " + (i+1)));
                 var input = document.createElement("input");
+                input.className = 'text-field';
                 input.type = "text";
                 input.name = "city" + i;
                 container.appendChild(input);
@@ -56,26 +76,28 @@ const app = () => {
 	return (
     <div className='page-container'>
 	  <h1>Form Registration</h1>
-    
+
 			  <form id="form">
 			    <label>
 			      First Name
-			      <input required type="text" name="fName" />
+			      <input className="text-field" required type="text" name="fName" />
             <br/>
 			      Last Name
-			      <input required type="text" name="lName" />
+			      <input className="text-field" required type="text" name="lName" />
             <br/>
 			      Street Adress
-			      <input required type="text" name="adress" />
+			      <input className="text-field" required type="text" name="adress" />
             <br/>
 			      Zip Code
-			      <input onChange={handleZipCode} required type="text" name="zip" />
+			      <input className="text-field" onChange={handleZipCode} required type="text" pattern="[0-9]*" maxLength='5' name="zip" />
+            <div hidden id='error-field'></div>
             <br/>
 			      State
-			      <input required type="text" name="state" />
+			      <input className="text-field" required type="text" name="state" />
             <br/>
 			      City&nbsp;&nbsp;&nbsp;
-			      <input required type="text" name="city" />
+            <input className="text-field" required type="text" name="city" />
+
             <br/>
 			      </label>
             <div id='container'></div>

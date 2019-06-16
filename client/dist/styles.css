@@ -22,7 +22,12 @@ form {
 	position: relative;
 }
 
-input {
+#error-field{
+	color: red;
+	
+}
+
+.text-field {
     width: 270px;
     height: 42px;
     margin-top: 7px;
