@@ -27,6 +27,10 @@ form {
 	
 }
 
+input {
+	display: inline-block;
+}
+
 .text-field {
     width: 270px;
     height: 42px;
