@@ -49,6 +49,7 @@ class App extends React.Component {
       city
     }
     console.log(info)
+    alert("Thank you, your form has been submitted");
   }
 
 
